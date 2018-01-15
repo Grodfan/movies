@@ -72,6 +72,6 @@ $(document).ready(function(){
                 '<button type="submit" class="btn btn-primary">Add</button>' +
               '</form>';
 
-      $content.html(form);
+      $content.append(form);
   }
 });
