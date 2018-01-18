@@ -3,6 +3,7 @@ $(document).ready(function(){
 
   $('#list').on('click', function(){
     $content.empty();
+    createSearchField();
     $.getJSON("movie/all", function(data) {
         createTable(data);
     });
@@ -19,13 +20,20 @@ $(document).ready(function(){
     $(this)[0].reset();
   });
 
+  $content.on('change', '#searchInput', function (event){
+    event.preventDefault();
+    var $searchInput = $('#searchInput').val();
+    console.log($searchInput);
+  })
+
   function createTable(data){
-      var movieTitle = 'Title';
-      var storyLine = 'Storyline';
-      var language = 'Language';
-      var runtime = 'Runtime';
-      var table = '<table class="table table-striped">' +
-                  '<thead' +
+
+    var movieTitle = 'Title';
+    var storyLine = 'Storyline';
+    var language = 'Language';
+    var runtime = 'Runtime';
+    var table = '<table class="table table-striped">' +
+                '<thead' +
                   '<tr>' +
                   '<th scope="col">' + '#' + '</th>' +
                   '<th scope="col">' + movieTitle + '</th>' +
@@ -36,17 +44,16 @@ $(document).ready(function(){
                   '</thead>' +
                   '<tbody>';
 
-      $.each(data, function (index) {
-          table += '<tr><th scope="row">' + (index + 1) + '</th>'
-          table += '<td>' + data[index].movieTitle + '</td>';
-          table += '<td>' + data[index].storyline + '</td>';
-          table += '<td>' + data[index].language + '</td>';
-          table += '<td>' + data[index].runtime + '</td></tr>';
-      });
-
+    $.each(data, function (index) {
+        table += '<tr><th scope="row">' + (index + 1) + '</th>'
+        table += '<td>' + data[index].movieTitle + '</td>';
+        table += '<td>' + data[index].storyline + '</td>';
+        table += '<td>' + data[index].language + '</td>';
+        table += '<td>' + data[index].runtime + '</td></tr>';
+    });
       table += '</tbody></table>';
 
-      $content.append(table);
+    $content.append(table);
   }
 
   function createAddForm(){
@@ -74,4 +81,16 @@ $(document).ready(function(){
 
       $content.append(form);
   }
+
+  function createSearchField(){
+    var searchField = '<div class="input-group input-group-lg">' +
+                        '<div class="input-group-prepend>"' +
+                          '<span class="input-group-text" id="inputGroup-sizing-lg">Search</span>' +
+                        '</div>' +
+                        '<input type="text" id="searchInput" class="form-control" aria-label="Large aria-describedby="inputGroup-sizing-sm">"' +
+                      '</div>';
+
+    $content.append(searchField);
+  }
+
 });

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(path = "/movie")
 public class MovieController {
@@ -38,4 +40,10 @@ public class MovieController {
     public @ResponseBody Iterable<Movie> getAllMovies(){
         return movieRepository.findAll();
     }
+
+    @RequestMapping(value = "/find/{language}", method = RequestMethod.GET)
+    public List<Movie> getMovieContaining(@PathVariable String language){
+        return movieRepository.getMovieByLanguage(language);
+    }
+
 }
