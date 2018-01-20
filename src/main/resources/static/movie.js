@@ -3,8 +3,7 @@ $(document).ready(function(){
 
   $('#list').on('click', function(){
     $content.empty();
-    createSearchField();
-    $.getJSON("movie/all", function(data) {
+    $.get("movie/all", function(data) {
         createTable(data);
     });
   });
@@ -14,20 +13,23 @@ $(document).ready(function(){
     createAddForm();
   });
 
+    $('#searchInput').on('change', function (event){
+        $content.empty();
+        var $searchInput = $('#searchInput').val();
+        var url = "movie/find/" + $searchInput;
+
+        $.get(url, function(data) {
+            createTable(data);
+        });
+    });
+
   $content.on('submit', '#formAdd', function(event) {
     event.preventDefault();
     $.get('movie/add', $('#formAdd').serialize());
     $(this)[0].reset();
   });
 
-  $content.on('change', '#searchInput', function (event){
-    event.preventDefault();
-    var $searchInput = $('#searchInput').val();
-    console.log($searchInput);
-  })
-
   function createTable(data){
-
     var movieTitle = 'Title';
     var storyLine = 'Storyline';
     var language = 'Language';
@@ -57,7 +59,7 @@ $(document).ready(function(){
   }
 
   function createAddForm(){
-    var form = '<form id="formAdd">' +
+    var form = '<div class="offset-1 mt-5"><form id="formAdd" class="col-4" >' +
                 '<div>' +
                   '<div class="form-group">' +
                     '<label for="movieTitle">Titel</label>' +
@@ -77,20 +79,9 @@ $(document).ready(function(){
                   '</div>' +
                 '</div>' +
                 '<button type="submit" class="btn btn-primary">Add</button>' +
-              '</form>';
+              '</form></div>';
 
       $content.append(form);
-  }
-
-  function createSearchField(){
-    var searchField = '<div class="input-group input-group-lg">' +
-                        '<div class="input-group-prepend>"' +
-                          '<span class="input-group-text" id="inputGroup-sizing-lg">Search</span>' +
-                        '</div>' +
-                        '<input type="text" id="searchInput" class="form-control" aria-label="Large aria-describedby="inputGroup-sizing-sm">"' +
-                      '</div>';
-
-    $content.append(searchField);
   }
 
 });

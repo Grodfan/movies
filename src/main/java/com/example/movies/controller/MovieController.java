@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path = "/movie")
 public class MovieController {
 
@@ -37,13 +37,13 @@ public class MovieController {
     }
 
     @GetMapping(path = ("/all"))
-    public @ResponseBody Iterable<Movie> getAllMovies(){
+    public @ResponseBody List<Movie> getAllMovies(){
         return movieRepository.findAll();
     }
 
-    @RequestMapping(value = "/find/{language}", method = RequestMethod.GET)
-    public List<Movie> getMovieContaining(@PathVariable String language){
-        return movieRepository.getMovieByLanguage(language);
+    @RequestMapping(value = "/find/{content}", method = RequestMethod.GET)
+    public @ResponseBody List<Movie> getMovieContaining(@PathVariable String content){
+        return movieRepository.findByMovieTitleOrLanguageContainingOrStorylineContaining(content, content, content);
     }
 
 }

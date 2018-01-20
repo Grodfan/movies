@@ -17,6 +17,16 @@ public class Movie {
     private String language;
     private Integer runtime;
 
+    public Movie() {
+    }
+
+    public Movie(String movieTitle, String storyline, String language, Integer runtime) {
+        this.movieTitle = movieTitle;
+        this.storyline = storyline;
+        this.language = language;
+        this.runtime = runtime;
+    }
+
     public Integer getId() {
         return id;
     }
