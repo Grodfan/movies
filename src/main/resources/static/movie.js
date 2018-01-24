@@ -13,13 +13,28 @@ $(document).ready(function(){
     createAddForm();
   });
 
-    $('#searchInput').on('change', function (event){
+  $('#searchInput').on('change', function (event){
+      $content.empty();
+      var $searchInput = $('#searchInput').val();
+      var input = $searchInput.replace(" ", "+");
+      var url = "http://www.omdbapi.com/?apikey=86e1e674&r=json&s=" + input;
+      $.get(url, function(data) {
+          console.log(data);
+          createTable(data);
+      });
+  });
+
+
+
+    $().on('change', function (event){
         $content.empty();
         var $searchInput = $('#searchInput').val();
         var url = "movie/find/" + $searchInput;
 
         $.get(url, function(data) {
-            createTable(data);
+            console.log(data);
+
+            createTable(obj);
         });
     });
 
@@ -30,28 +45,25 @@ $(document).ready(function(){
   });
 
   function createTable(data){
-    var movieTitle = 'Title';
-    var storyLine = 'Storyline';
-    var language = 'Language';
-    var runtime = 'Runtime';
+    var title = 'Title';
+    var year = 'Year';
+    var poster = 'Poster'
     var table = '<table class="table table-striped">' +
                 '<thead' +
                   '<tr>' +
                   '<th scope="col">' + '#' + '</th>' +
-                  '<th scope="col">' + movieTitle + '</th>' +
-                  '<th scope="col">' + storyLine + '</th>' +
-                  '<th scope="col">' + language + '</th>' +
-                  '<th scope="col">' + runtime + '</th>' +
+                  '<th scope="col">' + title + '</th>' +
+                  '<th scope="col">' + year + '</th>' +
+                  '<th scope="col">' + poster + '</th>' +
                   '</tr>' +
                   '</thead>' +
                   '<tbody>';
-
-    $.each(data, function (index) {
-        table += '<tr><th scope="row">' + (index + 1) + '</th>'
-        table += '<td>' + data[index].movieTitle + '</td>';
-        table += '<td>' + data[index].storyline + '</td>';
-        table += '<td>' + data[index].language + '</td>';
-        table += '<td>' + data[index].runtime + '</td></tr>';
+    $.each(data.Search, function (index, item) {
+        console.log(item);
+        table += '<tr><th scope="row">' + (index + 1) + '</th>';
+        table += '<td>' + item.Title + '</td>';
+        table += '<td>' + item.Year + '</td>';
+      //  table += '<td><img src=" ' + item.Poster + ' /></td></tr>';
     });
       table += '</tbody></table>';
 
@@ -82,6 +94,12 @@ $(document).ready(function(){
               '</form></div>';
 
       $content.append(form);
+  }
+
+  function searchMovie(){
+    $.getJSON("http://www.omdbapi.com/?apikey=86e1e674&t=Terminator&y=1984", function(data) {
+      console.log(data);
+    });
   }
 
 });
