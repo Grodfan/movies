@@ -52,18 +52,18 @@ $(document).ready(function(){
                 '<thead' +
                   '<tr>' +
                   '<th scope="col">' + '#' + '</th>' +
+                  '<th scope="col">' + poster + '</th>' +
                   '<th scope="col">' + title + '</th>' +
                   '<th scope="col">' + year + '</th>' +
-                  '<th scope="col">' + poster + '</th>' +
                   '</tr>' +
                   '</thead>' +
                   '<tbody>';
     $.each(data.Search, function (index, item) {
         console.log(item);
         table += '<tr><th scope="row">' + (index + 1) + '</th>';
+        table += '<td><img width="100" height="150" src=" ' + item.Poster + '" /></td>';
         table += '<td>' + item.Title + '</td>';
-        table += '<td>' + item.Year + '</td>';
-      //  table += '<td><img src=" ' + item.Poster + ' /></td></tr>';
+        table += '<td>' + item.Year + '</td></tr>';
     });
       table += '</tbody></table>';
 
@@ -94,12 +94,6 @@ $(document).ready(function(){
               '</form></div>';
 
       $content.append(form);
-  }
-
-  function searchMovie(){
-    $.getJSON("http://www.omdbapi.com/?apikey=86e1e674&t=Terminator&y=1984", function(data) {
-      console.log(data);
-    });
   }
 
 });
