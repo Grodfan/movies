@@ -1,5 +1,7 @@
 $(document).ready(function(){
   var $content = $('#content');
+  var url = "http://www.omdbapi.com/";
+  var apiKey = "86e1e674";
 
   $('#list').on('click', function(){
     $content.empty();
@@ -14,34 +16,29 @@ $(document).ready(function(){
   });
 
   $('#searchInput').on('change', function (event){
-      $content.empty();
-      var $searchInput = $('#searchInput').val();
-      var input = $searchInput.replace(" ", "+");
-      var url = "http://www.omdbapi.com/?apikey=86e1e674&r=json&s=" + input;
-      $.get(url, function(data) {
-          console.log(data);
-          createTable(data);
-      });
-  });
+    event.preventDefault();
+    $content.empty();
+    var $searchInput = $('#searchInput').val();
+    var input = $searchInput.replace(" ", "+");
 
 
-
-    $().on('change', function (event){
-        $content.empty();
-        var $searchInput = $('#searchInput').val();
-        var url = "movie/find/" + $searchInput;
-
-        $.get(url, function(data) {
-            console.log(data);
-
-            createTable(obj);
-        });
+    $.get(url, { apikey: apiKey, r: "json", s: input }, function(data) {
+      console.log(data);
+      createTable(data);
     });
+  });
 
   $content.on('submit', '#formAdd', function(event) {
     event.preventDefault();
     $.get('movie/add', $('#formAdd').serialize());
     $(this)[0].reset();
+  });
+
+  $content.on('click', ".addMovie", function(event) {
+    var imdbId = $(this).attr('id');
+    $.get(url, { apikey: apiKey, r: "json", i: imdbId}, function(data) {
+      console.log(data);
+    });
   });
 
   function createTable(data){
@@ -55,6 +52,7 @@ $(document).ready(function(){
                   '<th scope="col">' + poster + '</th>' +
                   '<th scope="col">' + title + '</th>' +
                   '<th scope="col">' + year + '</th>' +
+                  '<th scope="col"></th>' +
                   '</tr>' +
                   '</thead>' +
                   '<tbody>';
@@ -63,7 +61,8 @@ $(document).ready(function(){
         table += '<tr><th scope="row">' + (index + 1) + '</th>';
         table += '<td><img width="100" height="150" src=" ' + item.Poster + '" /></td>';
         table += '<td>' + item.Title + '</td>';
-        table += '<td>' + item.Year + '</td></tr>';
+        table += '<td>' + item.Year + '</td>';
+        table += '<td><button type="button" id="' + item.imdbID + '"class="addMovie btn btn-primary btn-xs">Add</button></td></tr>';
     });
       table += '</tbody></table>';
 
