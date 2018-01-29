@@ -19,10 +19,9 @@ $(document).ready(function(){
     event.preventDefault();
     $content.empty();
     var $searchInput = $('#searchInput').val();
-    var input = $searchInput.replace(" ", "+");
+    //var input = $searchInput.replace(" ", "+");
 
-
-    $.get(url, { apikey: apiKey, r: "json", s: input }, function(data) {
+    $.get(url, { apikey: apiKey, r: "json", s: $searchInput }, function(data) {
       console.log(data);
       createTable(data);
     });
@@ -36,37 +35,26 @@ $(document).ready(function(){
 
   $content.on('click', ".addMovie", function(event) {
     var imdbId = $(this).attr('id');
+    //Change url to backend, and get to post.
     $.get(url, { apikey: apiKey, r: "json", i: imdbId}, function(data) {
       console.log(data);
     });
   });
 
   function createTable(data){
-    var title = 'Title';
-    var year = 'Year';
-    var poster = 'Poster'
-    var table = '<table class="table table-striped">' +
-                '<thead' +
-                  '<tr>' +
-                  '<th scope="col">' + '#' + '</th>' +
-                  '<th scope="col">' + poster + '</th>' +
-                  '<th scope="col">' + title + '</th>' +
-                  '<th scope="col">' + year + '</th>' +
-                  '<th scope="col"></th>' +
-                  '</tr>' +
-                  '</thead>' +
-                  '<tbody>';
+    var movieSearchResult = "";
     $.each(data.Search, function (index, item) {
         console.log(item);
-        table += '<tr><th scope="row">' + (index + 1) + '</th>';
-        table += '<td><img width="100" height="150" src=" ' + item.Poster + '" /></td>';
-        table += '<td>' + item.Title + '</td>';
-        table += '<td>' + item.Year + '</td>';
-        table += '<td><button type="button" id="' + item.imdbID + '"class="addMovie btn btn-primary btn-xs">Add</button></td></tr>';
+        movieSearchResult += '<div class="gallery">' +
+          '<img src=" ' + item.Poster + '" /> ' +
+          '<div class"desc">' + item.Title + '<br/> ' +
+          '<button type="button" id="' + item.imdbID + '"class="infoMovie btn btn-primary btn-xs">Info</button>' +
+          '<button type="button" id="' + item.imdbID + '"class="addMovie btn btn-primary btn-xs">Add</button>' +
+          '</div>' +
+          '</div>';
     });
-      table += '</tbody></table>';
 
-    $content.append(table);
+    $content.append(movieSearchResult);
   }
 
   function createAddForm(){
